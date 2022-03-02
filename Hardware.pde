@@ -15,17 +15,21 @@ public class Hardware{
   HashMap<String, String> HDD;
   
   int clock;
+  
+  SOS os;
 
   Hardware(int RAMsize){
     RAM = new char[RAMsize];
     HDD = new HashMap<String, String>();
+    
   }
   
   void boot(){
     RAMinit();
     clock = 0;
-    counter = 0;
     moundHDD();
+    os = new SOS(3); //an OS with 3 partitions
+    os.startOS();
   }
   
   void RAMinit(){
@@ -48,13 +52,21 @@ public class Hardware{
     if(IR=='*'){
       counter++;
     }else if(IR=='$'){
-      RAMinit();
-      counter=0;
+      os.cleanup();
+      os.schedule();
     }else if(IR==' '){
       //Do nothing
     }
     return IR;
   }
   
-  
+  void keyboardEvent(char c){
+    if (c == '1') {
+      os.loadProgram("program1.exe");
+    } else if (c == '2') {
+      os.loadProgram("program2.exe");
+    } else if (c == '3') {
+      os.loadProgram("program3.exe");
+    }
+  }
 }
